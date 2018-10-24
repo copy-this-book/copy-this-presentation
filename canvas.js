@@ -41,12 +41,15 @@ if (getUrlParameter("accel")) {
 
 
 function Star() {
+    // all stars come from the middle
     this.X = field.width / 2;
     this.Y = field.height / 2;
 
+    // the star gets a speed in a random direction
     this.SX = Math.random() * 10 - 5;
     this.SY = Math.random() * 10 - 5;
 
+    // the star does not start exactly in the middle, but rather somewhere within a square in the center
     var start = 0;
 
     if (field.width > field.height)
@@ -57,6 +60,7 @@ function Star() {
     this.X += this.SX * start / 10;
     this.Y += this.SY * start / 10;
 
+    // when first drawn the stars are 1x1 pixel
     this.W = 1;
     this.H = 1;
 
@@ -71,19 +75,23 @@ function Star() {
 }
 
 Star.prototype.Draw = function () {
+    // displace position by speed
     this.X += this.SX;
     this.Y += this.SY
 
+    // the speed is multiplied by 1.02
     this.SX += this.SX / (50 / acceleration);
     this.SY += this.SY / (50 / acceleration);
 
     this.age++;
 
+    // At three moments in their lifecycle, the size gets bigger for the star
     if (this.age == Math.floor(50 / acceleration) | this.age == Math.floor(150 / acceleration) | this.age == Math.floor(300 / acceleration)) {
         this.W++;
         this.H++;
     }
 
+    // If the star gets out of the frame, we delete it
     if (this.X + this.W < 0 | this.X > field.width |
         this.Y + this.H < 0 | this.Y > field.height)
     {
@@ -91,6 +99,7 @@ Star.prototype.Draw = function () {
         numStars--;
     }
 
+    // draw the star
     f.fillStyle = this.C;
     f.fillRect(this.X, this.Y, this.W, this.H);
 }
