@@ -65,7 +65,7 @@ function Star() {
     stars[starIndex] = this;
 
     this.ID = starIndex;
-    this.C = "#ffffff";
+    this.C = "#2d3e9f";
 }
 
 Star.prototype.Draw = function () {
@@ -108,7 +108,7 @@ function draw() {
         field.height = window.innerHeight;
 
     // Play with the "a" value to create streams...it's fun!
-    f.fillStyle = "rgba(0, 0, 0, 0.8)";
+    f.fillStyle = "rgba(255, 251, 105, 0.7)";
     f.fillRect(0, 0, field.width, field.height);
 
     for (var i = numStars; i < starsToDraw; i++) {
