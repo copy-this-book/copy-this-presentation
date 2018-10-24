@@ -50,12 +50,7 @@ function Star() {
     this.SY = Math.random() * 10 - 5;
 
     // the star does not start exactly in the middle, but rather somewhere within a square in the center
-    var start = 0;
-
-    if (field.width > field.height)
-        start = field.width;
-    else
-        start = field.height;
+    var start = field.width > field.height ? field.width : field.height;
 
     this.X += this.SX * start / 10;
     this.Y += this.SY * start / 10;
@@ -65,7 +60,6 @@ function Star() {
     this.H = 1;
 
     this.age = 0;
-    this.dies = 500;
 
     starIndex++;
     stars[starIndex] = this;
@@ -77,7 +71,7 @@ function Star() {
 Star.prototype.Draw = function () {
     // displace position by speed
     this.X += this.SX;
-    this.Y += this.SY
+    this.Y += this.SY;
 
     // the speed is multiplied by 1.02
     this.SX += this.SX / (50 / acceleration);
@@ -86,14 +80,14 @@ Star.prototype.Draw = function () {
     this.age++;
 
     // At three moments in their lifecycle, the size gets bigger for the star
-    if (this.age == Math.floor(50 / acceleration) | this.age == Math.floor(150 / acceleration) | this.age == Math.floor(300 / acceleration)) {
+    if (this.age === Math.floor(50 / acceleration) || this.age === Math.floor(150 / acceleration) || this.age === Math.floor(300 / acceleration)) {
         this.W++;
         this.H++;
     }
 
     // If the star gets out of the frame, we delete it
-    if (this.X + this.W < 0 | this.X > field.width |
-        this.Y + this.H < 0 | this.Y > field.height)
+    if (this.X + this.W < 0 || this.X > field.width ||
+        this.Y + this.H < 0 || this.Y > field.height)
     {
         delete stars[this.ID];
         numStars--;
@@ -102,15 +96,15 @@ Star.prototype.Draw = function () {
     // draw the star
     f.fillStyle = this.C;
     f.fillRect(this.X, this.Y, this.W, this.H);
-}
+};
 
 field.width = window.innerWidth;
 field.height = window.innerHeight;
 
 function draw() {
-    if (field.width != window.innerWidth)
+    if (field.width !== window.innerWidth)
         field.width = window.innerWidth;
-    if (field.height != window.innerHeight)
+    if (field.height !== window.innerHeight)
         field.height = window.innerHeight;
 
     // Play with the "a" value to create streams...it's fun!
