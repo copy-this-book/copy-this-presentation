@@ -100,10 +100,14 @@ Star.prototype.Draw = function () {
     f.fillRect(this.X, this.Y, this.W, this.H);
 };
 
-function Text(text) {
+function Text(text, key) {
     this.text = text;
+    this.charCode = key.charCodeAt(0);
     this.fontSize = 0;
     this.S = 1;
+    this.stableSize = 100;
+    this.toStart = false;
+    this.toStop = true;
     texts.push(this);
 }
 
@@ -112,20 +116,29 @@ Text.prototype.Draw = function () {
     f.textAlign = 'center';
 
     f.fillText(this.text, field.width / 2, field.height / 2);
+    if (!this.toStart || (this.fontSize > this.stableSize && this.toStop)) {
+        // Don’t make image any larger;
+        return;
+    }
     this.fontSize += this.S;
     this.S = this.S * 1.02;
     if (this.fontSize > 1600) {
         this.fontSize = 0;
         this.S = 1;
+        this.toStart = false;
+        this.toStop = true;
     }
 };
 
-function Img(path) {
+function Img(path, key) {
     var self = this;
     this.width = 0;
     this.height = 0;
     this.ratio = 1;
     this.S = 1;
+    this.stableSize = 400;
+    this.toStart = false;
+    this.toStop = true;
     this.img = new Image();
     this.imgAvailable = false;
     this.img.onload = function() {
@@ -133,6 +146,7 @@ function Img(path) {
         self.imgAvailable = true;
     };
     this.img.src = path;
+    this.charCode = key.charCodeAt(0);
     images.push(this);
 }
 
@@ -140,20 +154,26 @@ Img.prototype.Draw = function () {
     if(this.imgAvailable) {
         f.drawImage(this.img, (field.width / 2 - .5 * this.width), (field.height / 2 - .5 * this.height), this.width, this.height);
     }
+    if (!this.toStart || (this.height > this.stableSize && this.toStop)) {
+        // Don’t make image any larger;
+        return;
+    }
     this.width += this.S;
     this.height += this.S * this.ratio;
     this.S = this.S * 1.02;
     if (this.height > 1600) {
         this.width = this.height = 0;
         this.S = 1;
+        this.toStart = false;
+        this.toStop = true;
     }
 };
 
 field.width = window.innerWidth;
 field.height = window.innerHeight;
 
-new Text("Hello World");
-new Img("./images/cover-3d.svg");
+new Text("Hello World", "q");
+new Img("./images/cover-3d.svg", " ");
 
 function draw() {
     requestAnimationFrame(draw);
@@ -186,3 +206,26 @@ function draw() {
 }
 
 draw();
+
+// Create a hash where we can look up elements (images, texts) by charCode
+elementsLookUp = {};
+images.concat(texts).forEach(function(e) {
+    elementsLookUp[e.charCode] = e;
+});
+
+document.onkeypress = function(e) {
+    e = e || window.event;
+    var charCode = (typeof e.which === "number") ? e.which : e.keyCode;
+    console.log(charCode);
+    console.log("Character typed: " + String.fromCharCode(charCode));
+
+    var element = elementsLookUp[charCode];
+    if (!element) {
+        return;
+    }
+    if (!element.toStart){
+        element.toStart = true;
+    } else if (element.toStop) {
+        element.toStop = false;
+    }
+};
