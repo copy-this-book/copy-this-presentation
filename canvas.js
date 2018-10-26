@@ -102,6 +102,7 @@ field.width = window.innerWidth;
 field.height = window.innerHeight;
 
 function draw() {
+    requestAnimationFrame(draw);
     if (field.width !== window.innerWidth)
         field.width = window.innerWidth;
     if (field.height !== window.innerHeight)
@@ -121,5 +122,4 @@ function draw() {
     }
 }
 
-// Original timing of the screensaver
-setInterval(draw, 40);
+draw();
