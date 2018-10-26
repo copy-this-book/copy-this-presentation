@@ -28,6 +28,8 @@ var field = document.getElementById("field");
 var f = field.getContext("2d");
 
 var stars = {};
+var texts = [];
+var images = [];
 var starIndex = 0;
 var numStars = 0;
 var acceleration = 1;
@@ -98,8 +100,60 @@ Star.prototype.Draw = function () {
     f.fillRect(this.X, this.Y, this.W, this.H);
 };
 
+function Text(text) {
+    this.text = text;
+    this.fontSize = 0;
+    this.S = 1;
+    texts.push(this);
+}
+
+Text.prototype.Draw = function () {
+    f.font = this.fontSize + "px 'Glacial Indifference'";
+    f.textAlign = 'center';
+
+    f.fillText(this.text, field.width / 2, field.height / 2);
+    this.fontSize += this.S;
+    this.S = this.S * 1.02;
+    if (this.fontSize > 1600) {
+        this.fontSize = 0;
+        this.S = 1;
+    }
+};
+
+function Img(path) {
+    var self = this;
+    this.width = 0;
+    this.height = 0;
+    this.ratio = 1;
+    this.S = 1;
+    this.img = new Image();
+    this.imgAvailable = false;
+    this.img.onload = function() {
+        self.ratio = self.img.height / self.img.width;
+        self.imgAvailable = true;
+    };
+    this.img.src = path;
+    images.push(this);
+}
+
+Img.prototype.Draw = function () {
+    if(this.imgAvailable) {
+        f.drawImage(this.img, (field.width / 2 - .5 * this.width), (field.height / 2 - .5 * this.height), this.width, this.height);
+    }
+    this.width += this.S;
+    this.height += this.S * this.ratio;
+    this.S = this.S * 1.02;
+    if (this.height > 1600) {
+        this.width = this.height = 0;
+        this.S = 1;
+    }
+};
+
 field.width = window.innerWidth;
 field.height = window.innerHeight;
+
+new Text("Hello World");
+new Img("./images/cover-3d.svg");
 
 function draw() {
     requestAnimationFrame(draw);
@@ -120,6 +174,15 @@ function draw() {
     for (var star in stars) {
         stars[star].Draw();
     }
+
+    texts.forEach(function (text) {
+        text.Draw();
+    });
+
+    images.forEach(function (image) {
+        image.Draw();
+    });
+
 }
 
 draw();
