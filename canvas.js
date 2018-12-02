@@ -176,14 +176,14 @@ Img.prototype.Draw = function () {
 field.width = window.innerWidth;
 field.height = window.innerHeight;
 
-new Text("Welcome to the world", "q", 19);
-new Text("of abstract ideas", "w", 20);
+new Img("./images/author-schema.svg", "q", 19);
+new Img("./images/original-expression-island.svg", "w", 20);
 new Text("Artists create from abstract ideas", "e", 21);
 new Img("./images/square.svg", "r", 22);
 
-new Img("./images/creativity.svg", "a", 27);
-new Img("./images/original-expression.svg", "s", 28);
-new Img("./images/author-death-timeline.svg", "d", 29);
+new Text("Welcome to the world", "a", 27);
+new Text("of abstract ideas", "s", 28);
+new Img("./images/schema-public-domain.svg", "d", 29);
 new Img("./images/vermeer.svg", "f", 30);
 
 new Img("./images/elsa.png", "j", 31);
