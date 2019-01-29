@@ -176,25 +176,28 @@ Img.prototype.Draw = function () {
 field.width = window.innerWidth;
 field.height = window.innerHeight;
 
-new Img("./images/author-schema.svg", "q", 19);
-new Img("./images/original-expression-island.svg", "w", 20);
-new Text("Artists create from abstract ideas", "e", 21);
-new Img("./images/square.svg", "r", 22);
+var elements = [
+    new Img("./images/author-schema.svg", "q", 0),
+    new Img("./images/original-expression-island.svg", "w", 1),
+    new Text("Artists create from abstract ideas", "e", 2),
+    new Img("./images/square.svg", "r", 3),
 
-new Text("Welcome to the world", "a", 27);
-new Text("of abstract ideas", "s", 28);
-new Img("./images/schema-public-domain.svg", "d", 29);
-new Img("./images/vermeer.svg", "f", 30);
+//    new Text("Welcome to the world", "a", 4),
+//    new Text("of abstract ideas", "s", 5),
+    new Img("./images/schema-public-domain.svg", "d", 6),
+    new Img("./images/vermeer.svg", "f", 7),
 
-new Img("./images/elsa.png", "j", 31);
-new Img("./images/rama-deckchair.png", "k", 32);
-new Img("./images/rama-fellatio.png", "l", 33);
-new Img("./images/apartment.jpg", ";", 34);
+    new Img("./images/elsa.png", "j", 12),
+    new Img("./images/rama-deckchair.png", "k", 13),
+    new Img("./images/rama-fellatio.png", "l", 14),
+    new Img("./images/apartment.jpg", ";", 15),
 
-new Text("❤", "n", 39);
-new Text("Parody?", "m", 40);
-new Text("Quotation?", ",", 41);
-new Img("./images/cover-3d.svg", ".", 42);
+//    new Text("❤", "n", 16),
+    new Text("Parody?", "m", 17),
+    new Text("Quotation?", ",", 18),
+    new Img("./images/author-schema.svg", "q", 19)
+//    new Img("./images/cover-3d.svg", ".", 19)
+];
 
 function draw() {
     requestAnimationFrame(draw);
@@ -241,10 +244,34 @@ draw();
 // Create a hash where we can look up elements (images, texts) by charCode or pitch
 elementsLookUp = {};
 elementsLookUpPitch = {};
-images.concat(texts).forEach(function(e) {
+elements.forEach(function(e) {
     elementsLookUp[e.charCode] = e;
     elementsLookUpPitch[e.pitch] = e;
 });
+
+var i = -1;
+var previousElement = function() {
+    if (i === 0) {
+        return false;
+    }
+    if (elements[i] && elements[i].toStart && elements[i].toStop) {
+        return elements[i];
+    }
+    i--;
+    console.log(i);
+    return elements[i];
+};
+var nextElement = function() {
+    if (i === (elements.length - 1)) {
+        return false;
+    }
+    if (elements[i] && elements[i].toStart && elements[i].toStop) {
+        return elements[i];
+    }
+    i++;
+    console.log(i);
+    return elements[i];
+};
 
 
 function handleElement(element) {
@@ -290,6 +317,43 @@ function getMIDIMessage(midiMessage) {
     if (!data || data.length !== 3) {
         return;
     }
+    console.log(data);
+    if ([151, 152].indexOf(data[0]) > -1 && data[2] === 127) {
+        var pitch = data[1];
+        if (data[0] === 152) {
+            pitch += 12;
+        }
+        console.log(pitch);
+        var element = elementsLookUpPitch[pitch];
+        handleElement(element);
+    }
+    if (data[0] === 182) {
+        if (data[0] && data[1] === 64) {
+            var el;
+            if (data[2] === 1) {
+                el = nextElement();
+                if (el) {
+                    handleElement(el)
+                }
+            }
+            if (data[2] === 127) {
+                el = previousElement();
+                if (el) {
+                    handleElement(el)
+                }
+            }
+        }
+    }
+    if (data[0] === 144 && data[1] === 88 && data[2] === 127) {
+        fillBlue = true;
+    }
+    if (data[0] === 144 && data[1] === 88 && data[2] === 0) {
+        fillBlue = false;
+    }
+
+
+
+    /*
     // We are only interested in note on messages,
     // of all channels!!
     if (data[2] === 127) {
@@ -299,5 +363,5 @@ function getMIDIMessage(midiMessage) {
         }
         var element = elementsLookUpPitch[pitch];
         handleElement(element);
-    }
+    } */
 }
