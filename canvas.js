@@ -179,10 +179,10 @@ field.height = window.innerHeight;
 var elements = [
     new Img("./images/author-schema.svg", "q", 0),
     new Img("./images/original-expression-island.svg", "w", 1),
-    new Text("Artists create from abstract ideas", "e", 2),
-    new Img("./images/square.svg", "r", 3),
+    new Img("./images/graphic-design.svg", "e", 2),
+    new Text("Artists create from abstract ideas", "r", 3),
 
-//    new Text("Welcome to the world", "a", 4),
+    new Img("./images/square.svg", "a", 4),
 //    new Text("of abstract ideas", "s", 5),
     new Img("./images/schema-public-domain.svg", "d", 6),
     new Img("./images/vermeer.svg", "f", 7),
@@ -195,8 +195,7 @@ var elements = [
 //    new Text("❤", "n", 16),
     new Text("Parody?", "m", 17),
     new Text("Quotation?", ",", 18),
-    new Img("./images/author-schema.svg", "q", 19)
-//    new Img("./images/cover-3d.svg", ".", 19)
+    new Img("./images/cover-3d.svg", ".", 19)
 ];
 
 function draw() {
@@ -249,7 +248,11 @@ elements.forEach(function(e) {
     elementsLookUpPitch[e.pitch] = e;
 });
 
-var i = -1;
+var i;
+var resetElement = function () {
+    i = -1;
+};
+resetElement();
 var previousElement = function() {
     if (i === 0) {
         return false;
@@ -272,7 +275,6 @@ var nextElement = function() {
     console.log(i);
     return elements[i];
 };
-
 
 function handleElement(element) {
     if (!element) {
@@ -318,6 +320,7 @@ function getMIDIMessage(midiMessage) {
         return;
     }
     console.log(data);
+    // IMAGES
     if ([151, 152].indexOf(data[0]) > -1 && data[2] === 127) {
         var pitch = data[1];
         if (data[0] === 152) {
@@ -327,6 +330,7 @@ function getMIDIMessage(midiMessage) {
         var element = elementsLookUpPitch[pitch];
         handleElement(element);
     }
+    // PREVIOUS NEXT
     if (data[0] === 182) {
         if (data[0] && data[1] === 64) {
             var el;
@@ -344,6 +348,7 @@ function getMIDIMessage(midiMessage) {
             }
         }
     }
+    // BLUE SCREEN
     if (data[0] === 144 && data[1] === 88 && data[2] === 127) {
         fillBlue = true;
     }
@@ -351,7 +356,14 @@ function getMIDIMessage(midiMessage) {
         fillBlue = false;
     }
 
-
+    if (data[0] === 150 && data[1] === 65 && data[2] === 127) {
+        elements.forEach(function (e) {
+            if (e.toStart && e.toStop) {
+                handleElement(e);
+            }
+        });
+        resetElement();
+    }
 
     /*
     // We are only interested in note on messages,
