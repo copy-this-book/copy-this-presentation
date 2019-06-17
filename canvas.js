@@ -183,7 +183,7 @@ var elements = [
     new Text("Artists create from abstract ideas", "r", 3),
 
     new Img("./images/square.svg", "a", 4),
-//    new Text("of abstract ideas", "s", 5),
+    new Text("Online @ 13:15", "s", 5),
     new Img("./images/schema-public-domain.svg", "d", 6),
     new Img("./images/vermeer.svg", "f", 7),
 
@@ -193,6 +193,7 @@ var elements = [
     new Img("./images/apartment.jpg", ";", 15),
 
 //    new Text("❤", "n", 16),
+    new Text("Short break", "n", 16),
     new Text("Parody?", "m", 17),
     new Text("Quotation?", ",", 18),
     new Img("./images/cover-3d.svg", ".", 19)
