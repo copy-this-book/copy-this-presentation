@@ -108,6 +108,7 @@ function Text(text, key, pitch) {
     this.fontSize = 0;
     this.S = 1;
     this.stableSize = 100;
+    this.stableWidth = field.width * 0.8;
     this.toStart = false;
     this.toStop = true;
     this.pitch = pitch;
@@ -119,12 +120,12 @@ Text.prototype.Draw = function () {
     f.textAlign = 'center';
 
     f.fillText(this.text, field.width / 2, field.height / 2);
-    if (!this.toStart || (this.fontSize > this.stableSize && this.toStop)) {
+    if (!this.toStart || (f.measureText(this.text).width > this.stableWidth && this.toStop)) {
         // Don’t make image any larger;
         return;
     }
     this.fontSize += this.S;
-    this.S = this.S * 1.02;
+    this.S = this.S * 1.03;
     if (this.fontSize > 1600) {
         this.fontSize = 0;
         this.S = 1;
@@ -140,6 +141,8 @@ function Img(path, key, pitch) {
     this.ratio = 1;
     this.S = 1;
     this.stableSize = 700;
+    this.stableWidth = field.width * 0.8;
+    this.stableHeight = field.height * 0.8;
     this.toStart = false;
     this.toStop = true;
     this.img = new Image();
@@ -158,13 +161,13 @@ Img.prototype.Draw = function () {
     if(this.imgAvailable) {
         f.drawImage(this.img, (field.width / 2 - .5 * this.width), (field.height / 2 - .5 * this.height), this.width, this.height);
     }
-    if (!this.toStart || ((this.height > this.stableSize || this.width > this.stableSize) && this.toStop)) {
+    if (!this.toStart || ((this.height > this.stableHeight || this.width > this.stableWidth) && this.toStop)) {
         // Don’t make image any larger;
         return;
     }
     this.width += this.S;
     this.height += this.S * this.ratio;
-    this.S = this.S * 1.02;
+    this.S = this.S * 1.03;
     if (this.height > field.height && this.width > field.width) {
         this.width = this.height = 0;
         this.S = 1;
