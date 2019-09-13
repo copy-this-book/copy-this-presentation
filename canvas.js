@@ -301,6 +301,31 @@ document.onkeypress = function(e) {
     handleElement(element);
 };
 
+/* Also allow cycling through the images with the arrow keys */
+document.onkeydown = function(e) {
+    var el;
+    e = e || window.event;
+    var charCode = (typeof e.which === "number") ? e.which : e.keyCode;
+    console.log(charCode);
+    switch(e.which) {
+        case 37: // left
+            el = previousElement();
+            if (el) {
+                handleElement(el)
+            }
+            break;
+        case 39: // right
+            el = nextElement();
+            if (el) {
+                handleElement(el)
+            }
+            break;
+        default:
+            return; // exit this handler for other keys};
+    }
+    e.preventDefault();
+};
+
 navigator.requestMIDIAccess()
     .then(onMIDISuccess, onMIDIFailure);
 
