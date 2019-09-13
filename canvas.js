@@ -183,23 +183,27 @@ var elements = [
     new Img("./images/author-schema.svg", "q", 0),
     new Img("./images/original-expression-island.svg", "w", 1),
     new Img("./images/graphic-design.svg", "e", 2),
-    new Text("Artists create from abstract ideas", "r", 3),
+//    new Text("Artists create from abstract ideas", "r", 3),
 
-    new Img("./images/square.svg", "a", 4),
-    new Text("Online @ 13:15", "s", 5),
+//    new Img("./images/square.svg", "a", 4),
+//    new Text("Online @ 13:15", "s", 5),
     new Img("./images/schema-public-domain.svg", "d", 6),
     new Img("./images/vermeer.svg", "f", 7),
 
     new Img("./images/elsa.png", "j", 12),
-    new Img("./images/rama-deckchair.png", "k", 13),
+//    new Img("./images/rama-deckchair.png", "k", 13),
     new Img("./images/rama-fellatio.png", "l", 14),
     new Img("./images/apartment.jpg", ";", 15),
 
+    new Img("./images/graphic-design.svg", "n", 16),
+    new Text("Thanks!", "m", 17),
+
+
 //    new Text("❤", "n", 16),
-    new Text("Short break", "n", 16),
-    new Text("Parody?", "m", 17),
-    new Text("Quotation?", ",", 18),
-    new Img("./images/cover-3d.svg", ".", 19)
+//    new Text("Short break", "n", 16),
+//    new Text("Parody?", "m", 17),
+//    new Text("Quotation?", ",", 18),
+//    new Img("./images/cover-3d.svg", ".", 19)
 ];
 
 function draw() {
