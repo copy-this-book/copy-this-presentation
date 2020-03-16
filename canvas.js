@@ -186,7 +186,7 @@ var elements = [
     new Text("Artists create from abstract ideas", "r", 3),
 
     new Img("./images/square.svg", "a", 4),
-    new Text("Online @ 13:15", "s", 5),
+//    new Text("Online @ 13:15", "s", 5),
     new Img("./images/schema-public-domain.svg", "d", 6),
     new Img("./images/vermeer.svg", "f", 7),
 
